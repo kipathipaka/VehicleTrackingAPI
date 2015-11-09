@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Vehicle Tracking</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Bootstrap core CSS -->
+    <link href="resources/css/bootstrap.css" rel="stylesheet" media="screen"/>
+    <style>
+      <!-- html { height: 100% }
+      body { height: 100%; background-color:#ffffff }
+      #map-outer { height: 440px; padding: 20px; margin-bottom: 20px; background-color:#FFF }
+	  #map-container { height: 100%;width:100%;top:0;bottom: 0;left: 0;right: 0;margin: auto; } -->
+	  <!-- @media all and (max-width: 991px) {
+		#map-outer  { height: 650px }
+		} -->
+    </style>
+	<link href="resources/css/style.css" rel="stylesheet" media="screen"/>
+  </head>
+  <body>
+  <div class="container">
+  <div class="row">
+      <div id="map-outer" class="col-md-12">
+        <div id="map-container" class="col-md-8"></div>
+		<!-- /strip_Content -->
+      </div><!-- /map-outer -->
+  </div> <!-- /row -->
+
+  <!-- /row -->
+</div><!-- /container -->
+<div class="container" id="strip_content">
+<div class="row">
+<div>
+		<h3 id = "strip_title">Get Continuous tracking with the app</h3> <br />
+		
+		</div>
+</div>
+<div class="row">
+	<div class="col-md-4 pull-left"> <a href="#" id="strip_noThanks_link"><h4>No Thanks</h4></a> </div>
+		<div id="strip_useApp_Btn" class="col-md-4 pull-right"> 
+		
+			<a class="btn btn-large btn-warning pull-right" href="https://play.google.com/store/apps/details?id=com.throwback.throwbackapp" id="" ><span class="glyphicon glyphicon-play"></span> &nbsp;Get app from PlayStore</a>
+		</div>
+</div>
+</div>
+    <script src="resources/js/jquery-1.10.2.min.js"></script>
+    <script src="resources/js/bootstrap.min.js"></script>
+    <script src="http://maps.google.co.in/maps/api/js?sensor=false"></script>
+    <script>
+    function mymap(){
+    	var st = "http://52.88.194.128:2020/vehicletracking-spring/api/trip/"+get("trip");
+    	 $.ajax({url: st, success: function(result){
+    	        alert(result):
+    	    }});
+    }
+   
+    function get(name){
+    	   if(name=(new RegExp('[?&]'+encodeURIComponent(name)+'=([^&]*)')).exec(location.search))
+    	      return decodeURIComponent(name[1]);
+    	}
+	
+      function init_map() {
+		//var myLocation = new google.maps.LatLng(13.0827,80.2707); // Chennai location kept statically.
+		var myLocation = new google.maps.LatLng(12.0754325,79.5528637);
+        var mapOptions = {
+          center: myLocation,
+          zoom: 6
+        };
+		
+		var marker = new google.maps.Marker({
+			position: myLocation,
+			title:"Chennai Here!"});
+			
+        var map = new google.maps.Map(document.getElementById("map-container"),
+            mapOptions);
+			map.panBy(0,-100);
+			
+		marker.setMap(map);	
+      }
+      google.maps.event.addDomListener(window, 'load', mymap);
+	  
+    </script>
+  </body>
+</html>
