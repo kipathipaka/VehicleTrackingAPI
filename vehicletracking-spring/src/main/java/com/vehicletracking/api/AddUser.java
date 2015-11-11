@@ -23,22 +23,23 @@ import com.vehicletracking.model.User;
 import com.vehicletracking.model.UserDAO;
 
 /**
- *@Class AddUser- it holds the AddUser details...
+ * @Class AddUser- it holds the AddUser details...
  * 
  * @Author Kirankumar Bpatech
  * @version 1.0
  */
 @Component
 @Path("/user")
-
 public class AddUser {
-	
+
 	protected final Log logger = LogFactory.getLog(AddUser.class);
-	
+
 	@Autowired
 	private UserDAO userDao;
+
 	/**
-	 * @Method MyMessage - used to get the user List and return as a Response object to restful clients.
+	 * @Method MyMessage - used to get the user List and return as a Response
+	 *         object to restful clients.
 	 * 
 	 * @return Response/userList
 	 * 
@@ -51,9 +52,12 @@ public class AddUser {
 		ArrayList<User> userList = (ArrayList<User>) userDao.getAll();
 		return Response.status(200).entity(userList).build();
 	}
+
 	/**
-	 * @method getOneUser -Here get the userId details and create the object into the user @pathparam to reduce the code to repetation of calling.
-	 * @param  userId
+	 * @method getOneUser -Here get the userId details and create the object
+	 *         into the user @pathparam to reduce the code to repetation of
+	 *         calling.
+	 * @param userId
 	 * @return response/user
 	 */
 	@GET
@@ -65,6 +69,7 @@ public class AddUser {
 		User user = (User) userDao.getUserByPhone(phoneNumber);
 		return Response.status(200).entity(user).build();
 	}
+
 	/**
 	 * @method saveUser- insert /create the user details
 	 * @param phone_number
@@ -82,35 +87,36 @@ public class AddUser {
 			@FormParam("Name") String name,
 			@FormParam("company_name") String company_name) {
 		User user = new User();
-		User checkUser = null; User savedUser = null;
+		User checkUser = null;
+		User savedUser = null;
 
 		if (phone_number != null) {
 			user.setPhone_number(phone_number);
-			}
+		}
 		if (company_name != null) {
 			user.setCompany_name(company_name);
 		}
 		if (name != null) {
 			user.setName(name);
 		}
-		if(phone_number != null){
-			
+		if (phone_number != null) {
+
 			checkUser = userDao.getUserByPhone(phone_number);
-			if(checkUser != null)
-			{
+			if (checkUser != null) {
 				logger.info("User already avaliable so updating status");
 				checkUser.setIs_active('Y');
 				checkUser.setApp_download_status('Y');
 				savedUser = userDao.updateUser(checkUser);
-			}else{
+			} else {
 				logger.info("new user . so creating new entry in table");
 				user.setIs_active('Y');
 				user.setApp_download_status('Y');
-			 savedUser = userDao.createUser(user);
+				savedUser = userDao.createUser(user);
 			}
 		}
 		return Response.status(200).entity(savedUser).build();
 	}
+
 	/**
 	 * @method deleteUser -delete the userId details
 	 * @param userId
@@ -125,8 +131,10 @@ public class AddUser {
 		User deletedUser = userDao.deleteUser(user);
 		return Response.status(200).entity(deletedUser).build();
 	}
+
 	/**
-	 * @method upadateUser -is used to update the user details and create the user object.
+	 * @method upadateUser -is used to update the user details and create the
+	 *         user object.
 	 * @param userId
 	 * @param phone_number
 	 * @param name
@@ -148,7 +156,7 @@ public class AddUser {
 		if (phone_number != null) {
 			user = (User) userDao.getUserByPhone(phone_number);
 			user.setPhone_number(phone_number);
-			
+
 		}
 		if (company_name != null) {
 			user.setCompany_name(company_name);
@@ -156,10 +164,10 @@ public class AddUser {
 		if (name != null) {
 			user.setName(name);
 		}
-		if(is_active !=null){
+		if (is_active != null) {
 			user.setIs_active(is_active.charAt(0));
 		}
-		if(app_download_status != null){
+		if (app_download_status != null) {
 			user.setApp_download_status(app_download_status.charAt(0));
 		}
 		User updatedUser = userDao.updateUser(user);

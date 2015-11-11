@@ -9,8 +9,10 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+
 /**
- * @Class VehicleDAO - is working as a Data Access Object, used to communicate with Database
+ * @Class VehicleDAO - is working as a Data Access Object, used to communicate
+ *        with Database
  * 
  * @Author Kirankumar Bpatech
  * @Version 1.0
@@ -21,9 +23,10 @@ public class VehicleDAO {
 	protected final Log logger = LogFactory.getLog(VehicleDAO.class);
 	@PersistenceContext
 	private EntityManager entityManager;
+
 	/**
 	 * @method createVehicle-user to persit the vehicle objects
-	 * @param  vehicle
+	 * @param vehicle
 	 * @return vehicle
 	 */
 	public Vehicle createVehicle(Vehicle vehicle) {
@@ -36,8 +39,9 @@ public class VehicleDAO {
 		logger.info("@@@ getAll Vehicles method in VehicleDAO.java");
 		return entityManager.createQuery("from Vehicle").getResultList();
 	}
+
 	/**
-	 * @method getOneVehicle - is used to find/get the vehicleId 
+	 * @method getOneVehicle - is used to find/get the vehicleId
 	 * @param vehicleId
 	 * @return vehicle
 	 */
@@ -50,8 +54,9 @@ public class VehicleDAO {
 		vehicle = (Vehicle) entityManager.find(Vehicle.class, vehicleId);
 		return vehicle;
 	}
+
 	/**
-	 *@method deleteVehicle - is used to delete/remove the vehicle details
+	 * @method deleteVehicle - is used to delete/remove the vehicle details
 	 * @param vehicle
 	 * @return vehicle
 	 */
@@ -62,6 +67,7 @@ public class VehicleDAO {
 
 		return vehicle;
 	}
+
 	/**
 	 * @method UpdatedVehicle - is used to merge the vehicle details
 	 * @param vehicle
@@ -75,15 +81,19 @@ public class VehicleDAO {
 		// entityManager.getTransaction().commit();
 		return updatedVehicle;
 	}
+
 	/**
-	 * @method getFilteredVehiclesByOwner - is used to filter vehicles based on owner Id
+	 * @method getFilteredVehiclesByOwner - is used to filter vehicles based on
+	 *         owner Id
 	 * @param vehicle
 	 * @return FilteredVehiclesByOwner
 	 */
-	 @SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked")
 	public List<Vehicle> getFilteredVehiclesByOwner(String ownerId) {
 		logger.info("inside getFilteredVehiclesByOwner method......");
-		return entityManager.createQuery("from Vehicle where APP_USER_MASTER_ID = :ownerId").setParameter("ownerId", ownerId).getResultList();
-	 }
-	 
+		return entityManager
+				.createQuery("from Vehicle where APP_USER_MASTER_ID = :ownerId")
+				.setParameter("ownerId", ownerId).getResultList();
+	}
+
 }
