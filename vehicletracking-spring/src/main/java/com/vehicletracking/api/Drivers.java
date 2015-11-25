@@ -123,7 +123,7 @@ public class Drivers {
 			}
 			if( driverUser != null){
 				logger.info("Got Driver obj "+driverUser.getPhone_number()+" : "+driverUser.getName());
-				driverUser.setIs_active('Y');
+				/*driverUser.setIs_active('Y');
 				driverUser.setApp_download_status('Y');
 				if(location != null){
 					driverUser.setLocation(location);
@@ -135,13 +135,13 @@ public class Drivers {
 				if(longitude != null){
 					driverUser.setLongitude(longitude);
 				}
-				savedDriverUser = userDAO.updateUser(driverUser);
+				savedDriverUser = userDAO.updateUser(driverUser);*/
 				userAssosiation.setApp_user_master(driverUser);
 			}else{
 				User driver = new User();
 				driver.setPhone_number(driverPhoneNumber);
 				driver.setIs_active('N');
-				driver.setLast_sync_date_time(currentDateTime);
+				//driver.setLast_sync_date_time(currentDateTime);
 				driver.setApp_download_status('N');
 				savedDriverUser = userDAO.createUser(driver);
 				logger.info("No Driver obj avaliable sio inserting new Driver :"+driver.getPhone_number()+" : "+driver.getName());
