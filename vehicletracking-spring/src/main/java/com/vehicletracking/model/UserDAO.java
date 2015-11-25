@@ -93,6 +93,35 @@ public class UserDAO {
 		}
 		return user;
 	}
+	
+	/**
+	 * @method getUserByPhoneWithStatus -create Query from the phone_number with is Active status
+	 * 
+	 * @param  phoneNumber
+	 
+	 * @return user
+	 */
+	
+	public User getUserByPhoneWithStatus(String phoneNumber) {
+		logger.info("@@@ inside getUserByPhoneWithStatus method......");
+		User user = null;
+		List<User> usersList = null;
+		// getting user object which have status of isActive and download status as 'Y' only 
+		try {
+			usersList = entityManager.createQuery("from User where phone_number = :phone_number AND is_active = 'Y' AND app_download_status = 'Y' ").setParameter("phone_number", phoneNumber).getResultList();
+			if (usersList.size() > 0) {
+				return usersList.get(0);
+			} else {
+				logger.info("No User Object avalible in User DAO");
+				user = null;
+				return user;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return user;
+	}
+	
 	/**
 	 * @method deleteUser -  is used to remove/delete the user data.
 	 * 

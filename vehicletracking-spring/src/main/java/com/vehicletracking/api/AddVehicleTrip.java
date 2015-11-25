@@ -133,23 +133,22 @@ public class AddVehicleTrip {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		Vehicle vehicle = new Vehicle();
-		Vehicle savedVehicleObj = null; Vehicle searchVehicle = null; 
+		Vehicle vehicle = null;
+		Vehicle savedVehicleObj = null;
 		User driverUser = null; User customerUser = new User(); User vehicleOwnerUser = new User();
 		if (truckNumber != null && !StringUtils.isEmpty(vehicleOwnerPhoneNumber)) {
 			logger.info("Got Truck Number "+truckNumber);
 			
+			vehicleOwnerUser = userDAO.getUserByPhoneWithStatus(vehicleOwnerPhoneNumber);
+			vehicle = vehicleDAO.getVehicleByUserAndTruckNumber(vehicleOwnerUser, truckNumber);
 			
-			vehicleOwnerUser = userDAO.getUserByPhone(vehicleOwnerPhoneNumber);
-			searchVehicle = vehicleDAO.getVehicleByUserAndTruckNumber(vehicleOwnerUser, truckNumber);
-			logger.info("Vehicle Owner User is :"+vehicleOwnerUser.getName());
-			
-			vehicle.setCreated_by(vehicleOwnerUser.getApp_user_master_id());
-			if(searchVehicle != null){
-				logger.info("Vehicle Object Reg Num is :"+searchVehicle.getVehicle_registration_number());
-				vehicleTrip.setVehicleOwner(searchVehicle.getUser());
-				vehicleTrip.setVehicle(searchVehicle);
+			if(vehicle != null){
+				logger.info("Vehicle Owner User is :"+vehicleOwnerUser.getName());
+				logger.info("Vehicle Object Reg Num is :"+vehicle.getVehicle_registration_number());
+				vehicleTrip.setVehicleOwner(vehicle.getUser());
+				vehicleTrip.setVehicle(vehicle);
 			}else{
+				vehicle = new Vehicle();
 				vehicle.setVehicle_registration_number(truckNumber);
 				vehicle.setIs_active('Y');
 				vehicle.setCreated_by(vehicleOwnerUser.getApp_user_master_id());
@@ -183,7 +182,12 @@ public class AddVehicleTrip {
 			customerUser = new User();
 			customerUser = userDAO.getUserByPhone(customerPhoneNumber);
 			if(customerUser != null){
-				logger.info("Got Customer obj "+driverUser.getPhone_number()+" : "+driverUser.getName());
+				if(customerUser.getName() == null && customerUser.getCompany_name() == null) {
+				customerUser.setName(customerName);
+				customerUser.setCompany_name(customerComanyName);
+				customerUser = userDAO.updateUser(customerUser);
+				}
+				logger.info("Got Customer obj "+customerUser.getPhone_number()+" : "+customerUser.getName());
 				vehicleTrip.setCustomer(customerUser);
 			}else{
 				User customer = new User();

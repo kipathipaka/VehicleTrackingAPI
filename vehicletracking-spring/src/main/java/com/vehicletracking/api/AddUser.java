@@ -67,7 +67,7 @@ public class AddUser {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getOneUser(@PathParam("phone_number") String phoneNumber) {
 		logger.info("@@@ getOne User Method...");
-		User user = (User) userDao.getUserByPhone(phoneNumber);
+		User user = (User) userDao.getUserByPhoneWithStatus(phoneNumber);
 		return Response.status(200).entity(user).build();
 	}
 	/**
