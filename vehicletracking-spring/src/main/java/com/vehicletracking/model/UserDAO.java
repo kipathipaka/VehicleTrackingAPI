@@ -3,6 +3,11 @@ package com.vehicletracking.model;
 import java.util.ArrayList;
 import java.util.List;
 
+
+
+
+
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -11,11 +16,9 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
-
 /**
- * @Class UserDAO - is working as a Data Access Object, used to communicate with
- *        Database
- * 
+ * @Class UserDAO - is working as a Data Access Object, used to communicate with Database
+ *
  * @Author Kirankumar Bpatech
  * @Version 1.0
  */
@@ -29,8 +32,7 @@ public class UserDAO {
 	/**
 	 * @Method create - used to persist the User object into Database.
 	 * 
-	 * @param User
-	 *            - holds the User object.
+	 * @param  User - holds the User object.
 	 * @return User
 	 */
 	public User createUser(User user) {
@@ -42,7 +44,7 @@ public class UserDAO {
 
 	/**
 	 * @method getAll to get All users in table.
-	 * @param user
+	 * @param  user
 	 * @return userList
 	 */
 	@SuppressWarnings("unchecked")
@@ -54,7 +56,7 @@ public class UserDAO {
 	/**
 	 * @method getOneUser-is used find the userid details
 	 * 
-	 * @param userId
+	 * @param userId 
 	 * @return user
 	 */
 	public User getOneUser(int userId) {
@@ -66,12 +68,11 @@ public class UserDAO {
 		user = (User) entityManager.find(User.class, userId);
 		return user;
 	}
-
 	/**
 	 * @method getUserByPhone -create Qurey from the phone_number
 	 * 
-	 * @param phoneNumber
-	 * 
+	 * @param  phoneNumber
+	 
 	 * @return user
 	 */
 	public User getUserByPhone(String phoneNumber) {
@@ -79,9 +80,7 @@ public class UserDAO {
 		User user = null;
 		List<User> usersList = null;
 		try {
-			usersList = entityManager
-					.createQuery("from User where phone_number = :phone_number")
-					.setParameter("phone_number", phoneNumber).getResultList();
+			usersList = entityManager.createQuery("from User where phone_number = :phone_number").setParameter("phone_number", phoneNumber).getResultList();
 			if (usersList.size() > 0) {
 				return usersList.get(0);
 			} else {
@@ -94,11 +93,10 @@ public class UserDAO {
 		}
 		return user;
 	}
-
 	/**
-	 * @method deleteUser - is used to remove/delete the user data.
+	 * @method deleteUser -  is used to remove/delete the user data.
 	 * 
-	 * @param user
+	 * @param  user
 	 * @return user
 	 */
 	public User deleteUser(User user) {
@@ -110,9 +108,8 @@ public class UserDAO {
 	}
 
 	/**
-	 * @method UpdateUser-used to update/merge the user details and craete the
-	 *         object to the user
-	 * @param user
+	 * @method UpdateUser-used to update/merge the user details and craete the object to the user
+	 * @param  user
 	 * @return updatedUser
 	 */
 	public User updateUser(User user) {

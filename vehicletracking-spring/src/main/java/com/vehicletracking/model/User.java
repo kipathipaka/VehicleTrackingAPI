@@ -1,5 +1,7 @@
 package com.vehicletracking.model;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -38,6 +40,21 @@ public class User {
 	@Column(name = "APP_DOWNLOAD_STATUS")
 	private char app_download_status;
 
+	@Column(name = "LOCATION")
+	private String location;
+
+	@Column(name = "LATITUDE")
+	private String latitude;
+
+	@Column(name = "LONGITUDE")
+	private String longitude;
+
+	@Column(name = "LAST_SYNC_DATE_TIME")
+	private Date last_sync_date_time;
+	
+	@Column(name = "FULL_ADDRESS")
+	private String fullAddress;
+	
 	/**
 	 * @Method app_user_master_id - used to set/populate the app_user_master_id.
 	 * @param app_user_master_id
@@ -113,4 +130,94 @@ public class User {
 	public void setApp_download_status(char app_download_status) {
 		this.app_download_status = app_download_status;
 	}
+
+	public String getLocation() {
+		return location;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
+	}
+
+	public String getLatitude() {
+		return latitude;
+	}
+
+	public void setLatitude(String latitude) {
+		this.latitude = latitude;
+	}
+
+	public String getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(String longitude) {
+		this.longitude = longitude;
+	}
+
+	public Date getLast_sync_date_time() {
+		return last_sync_date_time;
+	}
+
+	public void setLast_sync_date_time(Date last_sync_date_time) {
+		this.last_sync_date_time = last_sync_date_time;
+	}
+	
+	public String getFullAddress() {
+		return fullAddress;
+	}
+
+	public void setFullAddress(String fullAddress) {
+		this.fullAddress = fullAddress;
+	}
+
+	public char getisActiveChar(String isActive) {
+		char isActiveChar = 'N' ;
+
+		if (isActive.equalsIgnoreCase("Y")) {
+			isActiveChar = 'Y';
+		} else if (isActive.equalsIgnoreCase("N")) {
+			isActiveChar = 'N';
+		}
+
+		return isActiveChar;
+	}
+
+	public char setisActiveChar(String isActive) {
+		char isActiveChar = 'N';
+
+		if (isActive.equalsIgnoreCase("Y")) {
+			isActiveChar = 'Y';
+		} else if (isActive.equalsIgnoreCase("N")) {
+			isActiveChar = 'N';
+		}
+
+		return isActiveChar;
+	}
+	
+	
+	public char getappDownloadStatusChar(String appDownloadStatusStr) {
+		char appDownloadStatusChar = 'N' ;
+
+		if (appDownloadStatusStr.equalsIgnoreCase("Y")) {
+			appDownloadStatusChar = 'Y';
+		} else if (appDownloadStatusStr.equalsIgnoreCase("N")) {
+			appDownloadStatusChar = 'N';
+		}
+
+		return appDownloadStatusChar;
+	}
+
+	public char setappDownloadStatusChar(String appDownloadStatusStr) {
+		char appDownloadStatusChar = 'N';
+
+		if (appDownloadStatusStr.equalsIgnoreCase("Y")) {
+			appDownloadStatusChar = 'Y';
+		} else if (appDownloadStatusStr.equalsIgnoreCase("N")) {
+			appDownloadStatusChar = 'N';
+		}
+
+		return appDownloadStatusChar;
+	}
+
 }
