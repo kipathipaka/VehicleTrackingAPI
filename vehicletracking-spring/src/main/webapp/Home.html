@@ -55,9 +55,10 @@
 		var json = JSON.stringify(result);
  		var json2=$.parseJSON(json);
     	        
-		var lat = json2.latitude;
-		var lang= json2.longitude;
-		init_map(lat,lang);
+		var lat = json2.driver.latitude;
+		var lang= json2.driver.longitude;
+		var location= json2.driver.location;
+		init_map(lat,lang,location);
     	    }});
     }
    
@@ -66,7 +67,7 @@
     	      return decodeURIComponent(name[1]);
     	}
 	
-      function init_map(lat,lang) {
+      function init_map(lat,lang,location) {
 		//var myLocation = new google.maps.LatLng(13.0827,80.2707); // Chennai location kept statically.
 		var myLocation = new google.maps.LatLng(lat,lang);
         var mapOptions = {
@@ -76,7 +77,7 @@
 		
 		var marker = new google.maps.Marker({
 			position: myLocation,
-			title:"Chennai Here!"});
+			title:location});
 			
         var map = new google.maps.Map(document.getElementById("map-container"),
             mapOptions);
