@@ -123,19 +123,6 @@ public class Drivers {
 			}
 			if( driverUser != null){
 				logger.info("Got Driver obj "+driverUser.getPhone_number()+" : "+driverUser.getName());
-				/*driverUser.setIs_active('Y');
-				driverUser.setApp_download_status('Y');
-				if(location != null){
-					driverUser.setLocation(location);
-					driverUser.setLast_sync_date_time(currentDateTime);
-				}
-				if(latitude != null){
-					driverUser.setLatitude(latitude);
-				}
-				if(longitude != null){
-					driverUser.setLongitude(longitude);
-				}
-				savedDriverUser = userDAO.updateUser(driverUser);*/
 				userAssosiation.setApp_user_master(driverUser);
 			}else{
 				User driver = new User();
