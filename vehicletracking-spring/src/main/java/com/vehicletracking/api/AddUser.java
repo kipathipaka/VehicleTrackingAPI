@@ -181,10 +181,12 @@ public class AddUser {
 			@FormParam("latitude") String  latitude,
 			@FormParam("longitude") String longitude,
 			@FormParam("fullAddress") String fullAddress) {
+		logger.info("inside user update method...");
 		User user = null;
 		if (phone_number != null) {
 			user = (User) userDao.getUserByPhone(phone_number);
 			user.setPhone_number(phone_number);
+			logger.info("user phone number..."+phone_number);
 			
 		}
 		if (company_name != null) {
@@ -210,15 +212,17 @@ public class AddUser {
 		}
 		if(fullAddress != null){
 			user.setFullAddress(fullAddress);
+			logger.info("user address..."+fullAddress);
 		}
 		Calendar currentDate = Calendar.getInstance();
 		currentDate.setTimeZone(TimeZone.getTimeZone("IST"));
-		SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss"); // 2015-10-14 00:00:00
+		SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss a"); // 2015-10-14 00:00:00
 		Date currentDateTime = null;
 		try {
 			currentDateTime = (Date) formatter.parse(formatter
 					.format(currentDate.getTime()));
 			user.setLast_sync_date_time(currentDateTime);
+			logger.info("user update time..."+currentDateTime);
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -442,11 +442,14 @@ public class AddVehicleTrip {
 			@FormParam("driver_phone_number") String driverPhoneNumber,
 			@FormParam("location") String location,
 			@FormParam("latitude") String  latitude,
-			@FormParam("longitude") String longitude
+			@FormParam("longitude") String longitude,
+			@FormParam("fullAddress") String fulladdress
 			){
+		
+		logger.info("inside driver tracking update method..");
 		Calendar currentDate = Calendar.getInstance();
 		currentDate.setTimeZone(TimeZone.getTimeZone("IST"));
-		SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss"); // 2015-10-14 00:00:00
+		SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss"); // 2015-10-14 00:00:00
 		Date currentDateTime = null; User updatedUser = null;
 		try {
 			currentDateTime = (Date) formatter.parse(formatter
@@ -458,7 +461,9 @@ public class AddVehicleTrip {
 		User driverObj = null;
 		if(StringUtils.isNotBlank(driverPhoneNumber) || StringUtils.isNotEmpty(driverPhoneNumber)){
 			driverObj =  userDAO.getUserByPhone(driverPhoneNumber);
-			logger.info(driverObj.getName());
+			logger.info("driver name:"+driverObj.getName());
+			logger.info("ping coming from."+driverObj.getPhone_number());
+			logger.info("ping address."+fulladdress);
 			if(driverObj != null){
 				List<UserAssosiation> filteredUserAssosiations = userAssosiationDAO.getFilteredUserAssosiations(String.valueOf(driverObj.getApp_user_master_id()));
 				if(filteredUserAssosiations.size() > 0){
@@ -467,6 +472,7 @@ public class AddVehicleTrip {
 					driverObj.setLatitude(latitude);
 					driverObj.setLongitude(longitude);
 					driverObj.setLast_sync_date_time(currentDateTime);
+					driverObj.setFullAddress(fulladdress);
 					updatedUser =  userDAO.updateUser(driverObj);
 					logger.info("Updated Location info in user is :"+updatedUser.getLocation());	
 				} else {

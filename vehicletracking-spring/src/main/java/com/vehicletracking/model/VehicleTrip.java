@@ -19,6 +19,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.Loader;
 import org.hibernate.annotations.NamedNativeQuery;
@@ -95,6 +96,9 @@ public class VehicleTrip {
 	
 	@Column(name = "LAST_SYNC_DATE_TIME")
 	private Date last_sync_date_time;
+	
+	@Transient
+	private String trip_url;
 	
 	//@OneToMany (mappedBy="vehicleTrip", fetch = FetchType.EAGER)
 	//@Loader(namedQuery = "vehicleTripDetail")
@@ -288,6 +292,13 @@ public class VehicleTrip {
 	}
 	public void setLast_sync_date_time(Date last_sync_date_time) {
 		this.last_sync_date_time = last_sync_date_time;
+	}
+	public String getTrip_url() {
+		this.trip_url = "http://ec2-52-88-194-128.us-west-2.compute.amazonaws.com:2020/vehicletracking-spring/api/web/"+vehicle_trip_header_id;
+		return trip_url;
+	}
+	public void setTrip_url(String trip_url) {		
+		this.trip_url = trip_url;
 	}
 	
 	
