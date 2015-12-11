@@ -26,6 +26,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.vehicletracking.model.TripShare;
+import com.vehicletracking.model.TripShareDAO;
 import com.vehicletracking.model.User;
 import com.vehicletracking.model.UserAssosiation;
 import com.vehicletracking.model.UserAssosiationDAO;
@@ -64,6 +66,9 @@ public class AddVehicleTrip {
 	
 	@Autowired
 	private VehicleTripDetailDAO vehicleTripDetailDAO;
+	
+	@Autowired
+	private TripShareDAO tripShareDAO;
 	
 	/**
 	 * @method getVehicleTripsList -used get the vehicleTrip List and return the response
@@ -323,43 +328,23 @@ public class AddVehicleTrip {
 	@Produces(MediaType.APPLICATION_JSON)
 	public  Response getMyTrips(@PathParam("vehicle_owner_phone_number") String phoneNumber){
 		User tripUser = null; List<VehicleTrip> vehicleTripsList = null;
+		List<TripShare> tripShares = null;
 		if(!StringUtils.isEmpty(phoneNumber)){
 			tripUser = new User();
 			tripUser = userDAO.getUserByPhone(phoneNumber);
 		}
 		if(tripUser != null){
+		tripShares = new ArrayList<TripShare>();
+		vehicleTripsList = new ArrayList<VehicleTrip>();
+		tripShares = tripShareDAO.getTripSharesByUser(tripUser);// getting only Vehicle Trip list from trip share table based on user object.
 		String travel_Status = "END"; 
 		vehicleTripsList = vehicleTripDAO.getVehicleTripByVehicleObj(String.valueOf(tripUser.getApp_user_master_id()),travel_Status);
+		for(TripShare tripShare : tripShares){
+			vehicleTripsList.add(tripShare.getVehicleTripHeader());
+		}
 		logger.info("VehicleTrip List size is :"+vehicleTripsList.size());
 		}
 		
-		
-		/*if(!StringUtils.isEmpty(tripUser)){
-			logger.info("User Id is :"+tripUser.getApp_user_master_id()+" Name is :"+tripUser.getName());
-			vehicleTripsList = new ArrayList<VehicleTrip>();
-			vehicleTripsList = vehicleTripDAO.getFilteredVehicletripsByDriver(String.valueOf(tripUser.getApp_user_master_id()));
-			logger.info("Vehicle trips Driver size is :"+vehicleTripsList.size());
-			if(vehicleTripsList.size() == 0){
-				vehicleTripsList = vehicleTripDAO.getFilteredVehicletripsByCystomer(String.valueOf(tripUser.getApp_user_master_id()));
-				logger.info("Vehicle trips Customer size is :"+vehicleTripsList.size());
-				if(vehicleTripsList.size() == 0){
-					vehiclesList = new ArrayList<Vehicle>();
-					vehiclesList = vehicleDAO.getFilteredVehiclesByOwner(String.valueOf(tripUser.getApp_user_master_id()));
-					logger.info("VehicleList Owner size is :"+vehiclesList.size());
-					for(Vehicle vehicle : vehiclesList){
-						logger.info("Vehicle Id is :"+vehicle.getVehicle_master_id());
-						String travel_Status = "END"; 
-						vehicleTrip = vehicleTripDAO.getVehicleTripByVehicleObj(String.valueOf(vehicle.getVehicle_master_id()),travel_Status);
-						logger.info("VehicleTrip  is :"+vehicleTrip);
-						if(!StringUtils.isEmpty(vehicleTrip)){
-							logger.info("get Vehicle trip header id is :"+vehicleTrip.getVehicle_trip_header_id());
-							vehicleTripsList.add(vehicleTrip);
-						}
-					}
-					
-				}
-			}
-		}*/
 		return Response.status(200).entity(vehicleTripsList).build();
 	}
 	
@@ -369,10 +354,7 @@ public class AddVehicleTrip {
 	@Produces(MediaType.APPLICATION_JSON)
 	public  Response getMyTripDetailById(@PathParam("vehicle_trip_header_id") String vehicleTripHeaderId){
 		 List<VehicleTrip> vehicleTripsList = null;
-		/*if(!StringUtils.isEmpty(vehicleTripHeaderId)){
-			tripUser = new User();
-			tripUser = userDAO.getOneUser(Integer.parseInt(vehicleTripHeaderId));
-		}*/
+		
 		if(!StringUtils.isEmpty(vehicleTripHeaderId)){
 		String travel_Status = null; // sending travel status as "null" to get required vehicle trip header object data 
 		vehicleTripsList = vehicleTripDAO.getVehicleTripByVehicleObj(vehicleTripHeaderId,travel_Status);
@@ -380,59 +362,6 @@ public class AddVehicleTrip {
 		}
 		return Response.status(200).entity(vehicleTripsList).build();
 	}
-	
-	
-	
-	/*@POST
-	@Transactional
-	@Path("/userdetailinfo")
-	@Produces(MediaType.APPLICATION_JSON)
-	public  Response getUserDetailInfo(@FormParam("vehicle_owner_phone_number") String phoneNumber){
-		User tripUser = null; VehicleTrip vehicleTrip = null; List<VehicleTrip> vehicleTripsList = null;
-		List<UserAssosiation> userAssosiationsList = null; List list = null;
-		List<Vehicle> vehiclesList = null;
-		if(!StringUtils.isEmpty(phoneNumber)){
-			tripUser = new User();
-			tripUser = userDAO.getUserByPhone(phoneNumber);
-			userAssosiationsList = userAssosiationDAO.getFilteredUserAssosiations(String.valueOf(tripUser.getApp_user_master_id()));
-			for(UserAssosiation userAssosiation : userAssosiationsList){
-				logger.info("Parent User Id id :"+userAssosiation.getParent_user_master().getApp_user_master_id());
-			
-		
-		//if(!StringUtils.isEmpty(tripUser)){
-			logger.info("User Id is :"+userAssosiation.getParent_user_master().getApp_user_master_id()+" Name is :"+userAssosiation.getParent_user_master().getCompany_name());
-			vehicleTripsList = new ArrayList<VehicleTrip>();
-			vehicleTripsList = vehicleTripDAO.getFilteredVehicletripsByDriver(String.valueOf(userAssosiation.getParent_user_master().getApp_user_master_id()));
-			logger.info("Vehicle trips Driver size is :"+vehicleTripsList.size());
-			if(vehicleTripsList.size() == 0){
-				vehicleTripsList = vehicleTripDAO.getFilteredVehicletripsByCystomer(String.valueOf(userAssosiation.getParent_user_master().getApp_user_master_id()));
-				logger.info("Vehicle trips Customer size is :"+vehicleTripsList.size());
-				if(vehicleTripsList.size() == 0){
-					vehiclesList = new ArrayList<Vehicle>();
-					vehiclesList = vehicleDAO.getFilteredVehiclesByOwner(String.valueOf(userAssosiation.getParent_user_master().getApp_user_master_id()));
-					logger.info("VehicleList Owner size is :"+vehiclesList.size());
-					for(Vehicle vehicle : vehiclesList){
-						logger.info("Vehicle Id is :"+vehicle.getVehicle_master_id());
-						String travel_Status = "END"; 
-						vehicleTrip = vehicleTripDAO.getVehicleTripByVehicleObj(String.valueOf(vehicle.getVehicle_master_id()),travel_Status);
-						logger.info("VehicleTrip  is :"+vehicleTrip);
-						if(!StringUtils.isEmpty(vehicleTrip)){
-							logger.info("get Vehicle trip header id is :"+vehicleTrip.getVehicle_trip_header_id());
-							vehicleTripsList.add(vehicleTrip);
-						}
-					}
-					
-				}
-			}
-			list =  new ArrayList();
-			list.add(vehicleTripsList);
-			list.add(userAssosiation);
-		}
-		}
-		
-		return Response.status(200).entity(list).build();
-		return Response.status(200).entity(vehicleTripsList).build();
-	}*/
 	
 	@POST
 	@Transactional
@@ -481,43 +410,6 @@ public class AddVehicleTrip {
 				}
 			}
 		}
-		
-		/*if(driverPhoneNumber != null){
-			trackingVehicleTrip = vehicleTripDAO.trackTripByDriver(userDAO.getUserByPhone(driverPhoneNumber).getApp_user_master_id(),"STR"); // kept statically as "STR" only trip started vehicle details of driver to track.
-		}
-		
-		if(trackingVehicleTrip != null){
-			//vehicleTripDetail = new VehicleTripDetail();
-			trackingVehicleTrip.setLocation(location); trackingVehicleTrip.setLatitude(latitude);
-			trackingVehicleTrip.setLongitude(longitude); trackingVehicleTrip.setLast_sync_date_time(currentDateTime);
-			updatedVehicleTrip = vehicleTripDAO.updateVehicleTrip(trackingVehicleTrip);
-			if(updatedVehicleTrip != null) {
-			//vehicleTripDetail = vehicleTripDetailDAO.getVehicleTripDetailByVehicleTrip(trackingVehicleTrip);
-			//System.out.println("Vehicle rtip detail obj is :"+vehicleTripDetail);
-			vehicleTripDetail = new VehicleTripDetail();
-			vehicleTripDetail.setVehicleTrip(updatedVehicleTrip);
-			//if(vehicleTripDetail != null){
-				if (location != null) {
-					System.out.println("Setting Location is :"+location);
-					vehicleTripDetail.setLocation(location);
-				}
-				if (latitude != null) {
-					System.out.println("Setting latitude is :"+latitude);
-					vehicleTripDetail.setLatitude(latitude);
-				}
-				if (longitude != null) {
-					System.out.println("Setting longitude is :"+longitude);
-					vehicleTripDetail.setLongitude(longitude);
-				}
-				
-				try{
-					vehicleTripDetail.setLast_sync_date_time(currentDateTime);
-					}catch(Exception pe){pe.printStackTrace();}
-					
-				updatedVehicleTripDetail = vehicleTripDetailDAO.createVehicleTripDetail(vehicleTripDetail);
-			}
-		//	}
-		}*/
 		
 		return Response.status(200).entity(updatedUser).build();
 	}

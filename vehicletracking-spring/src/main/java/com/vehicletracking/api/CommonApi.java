@@ -10,9 +10,13 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
 import com.vehicletracking.model.CommonApiDAO;
+import com.vehicletracking.model.CommonMessagesDAO;
 import com.vehicletracking.model.UserAssosiation;
 import com.vehicletracking.model.UserDAO;
 /**
@@ -26,8 +30,13 @@ import com.vehicletracking.model.UserDAO;
 @Path("/common")
 public class CommonApi {
 	
+	protected final Log logger = LogFactory.getLog(CommonApi.class);
+	
 	@Autowired
 	private CommonApiDAO commonApiDAO;
+	
+	@Autowired
+	private CommonMessagesDAO commonMessagesDAO;
 	
 	@Autowired
 	private UserDAO userDAO;
@@ -62,6 +71,20 @@ public class CommonApi {
 		char type = 'C'; // setting statically because we need to get all Drivers list in user association 
 		userAssosiations = commonApiDAO.getUserAssosiationListByType(type);
 		return  Response.status(200).entity(userAssosiations).build();
+	}
+	
+	
+	/**
+	 * @method getCommonMessages to get All Messages which need to send user dynamically.
+	 * @return CommonMessages object
+	 */
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/messages")
+	public Response getCommonMessages(){
+		logger.info("@@@ inside getCommonMessages API Call method......");
+		return  Response.status(200).entity(commonMessagesDAO.getCommonMessages()).build();
 	}
 	
 	

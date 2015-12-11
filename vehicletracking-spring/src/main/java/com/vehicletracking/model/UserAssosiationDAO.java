@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 @Transactional
 public class UserAssosiationDAO {
-	protected final Log logger = LogFactory.getLog(UserAssosiation.class);
+	protected final Log logger = LogFactory.getLog(UserAssosiationDAO.class);
 	@PersistenceContext
 	private EntityManager entityManager;
 	/**
